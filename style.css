@@ -1,0 +1,198 @@
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&display=swap');
+
+
+:root{
+    --main-color:black;
+    --main-font: "EB Garamond";
+}
+
+body{
+    font-family: var(--main-font);
+    background-color: var(--main-color);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    
+}
+
+.logo-link{
+  display:block;
+  width:32%;
+}
+
+.logo-link img{
+  width:100%;
+  height:auto;
+  display:block;
+}
+
+header{
+    height: 20vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    color: goldenrod;
+}
+
+main {
+    height: 70vh;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: space-between;
+}
+
+main video{
+    position: absolute;
+    z-index: -1;
+    max-width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+main div{
+    width: 85vw;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+    margin: 40px;
+}
+
+main div section {
+    flex: 1 0 calc((100% / 4) - 40px);
+    text-align: center;
+    align-content: center;
+    border-radius: 5%;
+    background-color: goldenrod;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+
+    &:hover{
+        background-color: rgb(255, 195, 42);
+        transform: translateY(-10px);
+        box-shadow: 10px 10px 10px rgb(88, 67, 14);
+    }
+}
+
+main div section a{
+    text-decoration: none;
+    color: black;
+}
+
+main aside{
+    width: 10vw;
+         
+    & h3:hover{
+        font-size:x-large;
+        transition: all 0.4s ease;
+    }
+}
+
+main aside a{
+    text-decoration: none;
+    color: goldenrod;
+}
+
+footer{
+    background-color: goldenrod;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-content: center;
+}
+
+footer section{
+    display: flex;
+}
+
+footer .social figure img{
+    max-height: 5vh;
+    max-width: 5vw;
+}
+
+footer .conditions{
+    margin-right: 2vw;
+}
+
+footer a{
+    text-decoration: none;
+    color: black;
+
+    &:hover{
+        color: grey;
+        transition: all 0.4s ease;
+    }
+}
+
+/*MEDIA QUERIES*/
+
+@media (max-width:600px){
+
+    body{
+        flex-wrap: wrap;
+    }
+
+    main{
+        overflow-y: auto;
+        flex-wrap: wrap;
+    }
+
+    main div{
+        width: 100%;
+        order: 1;
+    }
+
+    main div section {
+        flex: 0 0 100%;
+    }
+
+    main aside{
+        width: 100%;
+        order: 2;
+        display: flex;
+        justify-content: space-around;
+        align-content: center;
+    }
+
+    footer{
+        min-height: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+    }
+
+}
+
+
+/* CONTACT.HTML */
+
+#contactmain{
+    display: flex;
+    justify-content: center;
+}
+
+#taskform{
+    background-color: goldenrod;
+
+}
+
+main section h2{
+    color: goldenrod;
+}
+
+#clientdata{
+    display: flex;
+    flex-direction: column;
+    margin: 10%;
+}
+
+#about{
+    display: flex;
+    flex-direction: column;
+    margin: 10%;
+}
+
+#submitid{
+    margin: 10%;
+}
+

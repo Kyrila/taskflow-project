@@ -1,0 +1,28 @@
+<svg width="400" height="120" viewBox="0 0 400 120" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .text-main {
+      font-family: Arial, sans-serif;
+      font-size: 28px;
+      font-weight: bold;
+      fill: #DAA520;
+    }
+    .text-sub {
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      fill: #444;
+    }
+  </style>
+
+  <!-- Icono auriculares -->
+  <circle cx="60" cy="60" r="40" stroke="#DAA520" stroke-width="6" fill="none"/>
+  <rect x="30" y="55" width="10" height="25" fill="#DAA520"/>
+  <rect x="80" y="55" width="10" height="25" fill="#DAA520"/>
+  
+  <!-- Nota musical -->
+  <circle cx="60" cy="55" r="6" fill="#DAA520"/>
+  <line x1="66" y1="55" x2="66" y2="40" stroke="#DAA520" stroke-width="3"/>
+
+  <!-- Texto -->
+  <text x="120" y="55" class="text-main">Welcome to</text>
+  <text x="120" y="85" class="text-main">Music App</text>
+</svg>

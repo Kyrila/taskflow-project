@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact</title>
+    <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo-link"><img src="img/Music-App-logo.svg" alt="Music App logo"></a>
+    </header>
+
+    <main id="contactmain">
+        <video class="hero" autoplay loop muted src="media/polvo.mp4"  playsinline></video>
+
+        <section><h2>Contact Form</h2>
+            <form id="taskform">
+
+                <fieldset id="clientdata">
+                    <legend>Personal Information</legend>
+
+                    <label for="fname">First name 
+                        <input type="text" id="fname" name="fname" placeholder="Write here" required>
+                    </label>
+                    <label for="lname">Last name
+                        <input type="text" id="lname" name="lname" placeholder="Write here" required>
+                    </label>
+                    <label for="tel">Phone number 
+                        <input type="tel" id="tel" name="tel" placeholder="Write here" required>
+                    </label>
+                    <label for="email">Email
+                        <input type="email" id="email" name="email" placeholder="Write here" required>
+                    </label>
+                </fieldset>
+
+                <fieldset id="about">
+                    <legend>How did you hear about us?</legend>
+                    
+                    <label for="google">Google Search
+                        <input type="checkbox" id="google" name="google" value="google">
+                    </label>
+                                        
+                    <label for="facebook">Facebook
+                        <input type="checkbox" id="facebook" name="facebook" value="facebook">
+                    </label>
+
+                    <label for="instagram">Instagram
+                        <input type="checkbox" id="instagram" name="instagram" value="instagram">
+                    </label>
+                    
+                    <label for="friend">Friend or Family
+                        <input type="checkbox" id="friend" name="friend" value="friend">
+                    </label>
+                    
+                    <label for="twitter">Twitter
+                        <input type="checkbox" id="twitter" name="twitter" value="twitter">
+                    </label>
+                    
+                    <label for="others">Others
+                        <input type="checkbox" id="others" name="others" value="others">
+                    </label>
+                </fieldset>
+
+                <section id="submitid">
+                    
+                    <input type="submit" value="Submit" name="submit">
+                    <input type="reset" value="Reset" name="reset">
+                   
+                </section>
+            </form>
+        </section>
+
+    </main>
+
+    <footer>
+        <section class="social">
+            <figure>
+                <img src="img/Facebook.svg" alt="Facebook logo">
+            </figure>
+            <figure>
+                <img src="img/Instagram.svg" alt="Instagram logo">
+            </figure>
+            <figure>
+                <img src="img/Facebook.svg" alt="Twitter logo">
+            </figure>
+        </section>
+
+        <section>
+            <h4>Music App by Kyrila ©2026</h4>
+        </section>
+
+        <section class="conditions">
+            <h4>
+                <a href="terms.html">Terms and conditions</a>
+            </h4>
+        </section>
+            
+    </footer>
+
+    <script src="js/app.js"></script>
+
+</body>
+</html>
