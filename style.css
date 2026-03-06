@@ -171,6 +171,10 @@ footer a{
     justify-content: center;
 }
 
+#formsection{
+    width: 20%;
+}
+
 #taskform{
     background-color: goldenrod;
 
@@ -196,3 +200,36 @@ main section h2{
     margin: 10%;
 }
 
+
+/*PARA LAS DIFERENTES PESTAÑAS*/
+
+#maingenre{
+    display: flex;
+}
+
+nav{
+    display: flex;
+    flex: 1 0 0;
+    justify-content: space-evenly;
+    height: 10%;
+    align-items: center;
+}
+
+nav a{
+    color: goldenrod;
+    text-decoration: none;
+    justify-content: center;
+}
+
+
+/*TERMS AND CONDITIONS*/
+
+#sectionterms{
+    display: flex;
+    justify-content: center;
+}
+
+section.terms{
+    color: goldenrod;
+    justify-content: center;
+}
