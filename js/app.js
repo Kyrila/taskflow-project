@@ -53,7 +53,7 @@ function saveTasks() {
 function createTaskItem(texto, index) {
     const li = document.createElement("li");
     li.className = "todo-item";
-    li.dataset.index = index;
+    li.dataset.index = index; // para saber cuál tarea está borrando después (Le asigna un atributo data-index="0" o "1")
 
     const span = document.createElement("span");
     span.className = "todo-text";
@@ -75,7 +75,7 @@ function loadTasks() {
     const list = document.getElementById("todo-list");
     if (!list) return;
 
-    list.innerHTML = "";
+    list.innerHTML = ""; // Vacía el contenido antes de llenarlo de nuevo
 
     tasks.forEach((texto, index) => {
         list.appendChild(createTaskItem(texto, index));
@@ -85,41 +85,42 @@ function loadTasks() {
 
 
 // ======================================================
-// ======= SE ACTIVA SOLO SI EXISTE EL TO‑DO ============
+// ===== SE ACTIVA SOLO SI EXISTE EL WIDGET TO‑DO =======
 // ======================================================
 
+//se ejecuta cuando todo el HTML ya está cargado
 document.addEventListener("DOMContentLoaded", () => {
     const todoForm = document.getElementById("task-form");
     const input = document.getElementById("new-task");
     const list = document.getElementById("todo-list");
 
-    // Si no existe el widget → salir (no rompe otras páginas)
+    // Si no existe el widget → salir del script (no rompe otras páginas)
     if (!todoForm || !input || !list) return;
 
-    // Cargar tareas
+    // Cargar tareas guardadas al abrir la página
     loadTasks();
 
     // Añadir tarea
     todoForm.addEventListener("submit", (e) => {
         e.preventDefault();
 
-        const texto = input.value.trim();
+        const texto = input.value.trim(); // Evita tareas vacías + Elimina espacios al inicio y final
         if (!texto) {
             input.value = "";
             return;
         }
 
-        tasks.push(texto);
+        tasks.push(texto); // Añade la nueva tarea al array
         saveTasks();
         loadTasks();
 
-        input.value = "";
-        input.focus();
+        input.value = ""; // Limpia la caja
+        input.focus();  // Vuelve a darle el foco para escribir rápidamente
     });
 
     // Eliminar tarea
     list.addEventListener("click", (e) => {
-        if (e.target.classList.contains("delete-btn")) {
+        if (e.target.classList.contains("delete-btn")) {  // Asegura que el clic fue en un botón de borrar
             const li = e.target.closest("li");
             const index = li.dataset.index;
 
