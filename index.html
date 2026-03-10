@@ -92,6 +92,27 @@
             <h3>
                 <a href="contact.html">Contact</a>
             </h3>
+
+            
+<!-- === To-Do List Widget === -->
+            <section class="todo" aria-labelledby="todo-title">
+                <h3 id="todo-title">My tasks</h3>
+
+                <form id="task-form" autocomplete="off">
+                    <label class="sr-only" for="new-task">New task</label>
+                    <input
+                        id="new-task"
+                        type="text"
+                        placeholder="Write a task…"
+                        maxlength="120"
+                        aria-label="Escribe una tarea"
+                    />
+                    <button type="submit" aria-label="Añadir tarea">Add</button>
+                </form>
+
+                <ul id="todo-list" aria-live="polite" aria-label="Lista de tareas"></ul>
+            </section>
+
         </aside>
 
     </main>
