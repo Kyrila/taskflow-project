@@ -6,7 +6,13 @@
 const contactForm = document.getElementById("taskform");
 
 if (contactForm) {
-    let contacts = JSON.parse(localStorage.getItem("contacts")) || []; // JSON.parse(...) → convierte el texto a un array + || [] → si no hay nada guardado, usa un array vacío
+    let contacts;
+    try {
+        contacts = JSON.parse(localStorage.getItem("contacts") || "[]");// JSON.parse(...) → convierte el texto a un array + || [] → si no hay nada guardado, usa un array vacío
+        if (!Array.isArray(contacts)) contacts = [];
+    } catch {
+        contacts = [];
+    }
 
     contactForm.addEventListener("submit", function (e) {
         e.preventDefault(); // Evita que recargue la página
@@ -40,7 +46,6 @@ if (contactForm) {
 
 
 const TASKS_KEY = "tasks"; //Clave LocalStorage
-
 
 let tasks = JSON.parse(localStorage.getItem(TASKS_KEY)) || []; // Cargar tareas
 
