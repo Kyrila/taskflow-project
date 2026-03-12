@@ -1,106 +1,308 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact</title>
 
+  <!-- Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            goldenrod: '#DAA520',
+          },
+          fontFamily: {
+            garamond: ['"EB Garamond"', 'serif'],
+          },
+        },
+      },
+    };
+  </script>
 </head>
-<body>
 
-    <header>
-        <a href="index.html" class="logo-link"><img src="img/Music-App-logo.svg" alt="Music App logo"></a>
-    </header>
+<body class="min-h-screen flex flex-col bg-black font-garamond text-goldenrod">
+  <!-- HEADER (mismo tamaño que index.html) -->
+  <header class="h-[20vh] w-full flex items-center justify-center">
+    <a
+      href="index.html"
+      class="block w-2/3 md:w-1/2 lg:w-1/3 max-w-md"
+    >
+      <img
+        src="img/Music-App-logo.svg"
+        alt="Music App logo"
+        class="w-full h-auto block"
+      />
+    </a>
+  </header>
 
-    <main id="contactmain">
-        <video class="hero" autoplay loop muted src="media/polvo.mp4"  playsinline></video>
+  <!-- MAIN -->
+  <main
+    id="contactmain"
+    class="relative flex-1 flex items-center justify-center px-4 py-8 overflow-hidden"
+  >
+    <!-- Vídeo de fondo -->
+    <video
+      class="hero absolute inset-0 w-full h-full object-cover -z-10 opacity-40"
+      autoplay
+      loop
+      muted
+      src="media/polvo.mp4"
+      playsinline
+    ></video>
 
-        <section id="formsection"><h2>Contact Form</h2>
-            <form id="taskform">
+    <!-- Tarjeta de formulario -->
+    <section
+      id="formsection"
+      class="w-full max-w-xl bg-black/70 border border-goldenrod/60 rounded-2xl shadow-2xl px-6 py-7 backdrop-blur-sm text-goldenrod"
+    >
+      <h2 class="text-2xl font-semibold text-center tracking-wide mb-4">
+        Contact Form
+      </h2>
 
-                <fieldset id="clientdata">
-                    <legend>Personal Information</legend>
+      <form id="taskform" class="flex flex-col gap-5">
+        <!-- Datos personales -->
+        <fieldset
+          id="clientdata"
+          class="border border-goldenrod/60 rounded-xl px-4 py-3 flex flex-col gap-3"
+        >
+          <legend class="px-2 font-semibold tracking-wide">
+            Personal Information
+          </legend>
 
-                    <label for="fname">First name 
-                        <input type="text" id="fname" name="fname" placeholder="Write here" required>
-                    </label>
-                    <label for="lname">Last name
-                        <input type="text" id="lname" name="lname" placeholder="Write here" required>
-                    </label>
-                    <label for="tel">Phone number 
-                        <input type="tel" id="tel" name="tel" placeholder="Write here" required>
-                    </label>
-                    <label for="email">Email
-                        <input type="email" id="email" name="email" placeholder="Write here" required>
-                    </label>
-                </fieldset>
+          <label
+            for="fname"
+            class="flex flex-col gap-1 text-sm"
+          >
+            First name
+            <input
+              type="text"
+              id="fname"
+              name="fname"
+              placeholder="Write here"
+              required
+              class="px-3 py-2 rounded-lg border border-goldenrod/80 bg-black/80 text-goldenrod placeholder-yellow-300/90 outline-none focus:border-yellow-300 focus:ring-2 focus:ring-yellow-400/60"
+            />
+          </label>
 
-                <fieldset id="about">
-                    <legend>How did you hear about us?</legend>
-                    
-                    <label for="google">Google Search
-                        <input type="checkbox" id="google" name="google" value="google">
-                    </label>
-                                        
-                    <label for="facebook">Facebook
-                        <input type="checkbox" id="facebook" name="facebook" value="facebook">
-                    </label>
+          <label
+            for="lname"
+            class="flex flex-col gap-1 text-sm"
+          >
+            Last name
+            <input
+              type="text"
+              id="lname"
+              name="lname"
+              placeholder="Write here"
+              required
+              class="px-3 py-2 rounded-lg border border-goldenrod/80 bg-black/80 text-goldenrod placeholder-yellow-300/90 outline-none focus:border-yellow-300 focus:ring-2 focus:ring-yellow-400/60"
+            />
+          </label>
 
-                    <label for="instagram">Instagram
-                        <input type="checkbox" id="instagram" name="instagram" value="instagram">
-                    </label>
-                    
-                    <label for="friend">Friend or Family
-                        <input type="checkbox" id="friend" name="friend" value="friend">
-                    </label>
-                    
-                    <label for="twitter">Twitter
-                        <input type="checkbox" id="twitter" name="twitter" value="twitter">
-                    </label>
-                    
-                    <label for="others">Others
-                        <input type="checkbox" id="others" name="others" value="others">
-                    </label>
-                </fieldset>
+          <label
+            for="tel"
+            class="flex flex-col gap-1 text-sm"
+          >
+            Phone number
+            <input
+              type="tel"
+              id="tel"
+              name="tel"
+              placeholder="Write here"
+              required
+              class="px-3 py-2 rounded-lg border border-goldenrod/80 bg-black/80 text-goldenrod placeholder-yellow-300/90 outline-none focus:border-yellow-300 focus:ring-2 focus:ring-yellow-400/60"
+            />
+          </label>
 
-                <section id="submitid">
-                    
-                    <input type="submit" value="Submit" name="submit">
-                    <input type="reset" value="Reset" name="reset">
-                   
-                </section>
-            </form>
+          <label
+            for="email"
+            class="flex flex-col gap-1 text-sm"
+          >
+            Email
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="Write here"
+              required
+              class="px-3 py-2 rounded-lg border border-goldenrod/80 bg-black/80 text-goldenrod placeholder-yellow-300/90 outline-none focus:border-yellow-300 focus:ring-2 focus:ring-yellow-400/60"
+            />
+          </label>
+        </fieldset>
+
+        <!-- Cómo nos conociste -->
+        <fieldset
+          id="about"
+          class="border border-goldenrod/60 rounded-xl px-4 py-3 flex flex-col gap-2"
+        >
+          <legend class="px-2 font-semibold tracking-wide">
+            How did you hear about us?
+          </legend>
+
+          <label
+            for="google"
+            class="flex items-center justify-between gap-3 text-sm"
+          >
+            <span>Google Search</span>
+            <input
+              type="checkbox"
+              id="google"
+              name="google"
+              value="google"
+              class="accent-goldenrod h-4 w-4"
+            />
+          </label>
+
+          <label
+            for="facebook"
+            class="flex items-center justify-between gap-3 text-sm"
+          >
+            <span>Facebook</span>
+            <input
+              type="checkbox"
+              id="facebook"
+              name="facebook"
+              value="facebook"
+              class="accent-goldenrod h-4 w-4"
+            />
+          </label>
+
+          <label
+            for="instagram"
+            class="flex items-center justify-between gap-3 text-sm"
+          >
+            <span>Instagram</span>
+            <input
+              type="checkbox"
+              id="instagram"
+              name="instagram"
+              value="instagram"
+              class="accent-goldenrod h-4 w-4"
+            />
+          </label>
+
+          <label
+            for="friend"
+            class="flex items-center justify-between gap-3 text-sm"
+          >
+            <span>Friend or Family</span>
+            <input
+              type="checkbox"
+              id="friend"
+              name="friend"
+              value="friend"
+              class="accent-goldenrod h-4 w-4"
+            />
+          </label>
+
+          <label
+            for="twitter"
+            class="flex items-center justify-between gap-3 text-sm"
+          >
+            <span>Twitter</span>
+            <input
+              type="checkbox"
+              id="twitter"
+              name="twitter"
+              value="twitter"
+              class="accent-goldenrod h-4 w-4"
+            />
+          </label>
+
+          <label
+            for="others"
+            class="flex items-center justify-between gap-3 text-sm"
+          >
+            <span>Others</span>
+            <input
+              type="checkbox"
+              id="others"
+              name="others"
+              value="others"
+              class="accent-goldenrod h-4 w-4"
+            />
+          </label>
+        </fieldset>
+
+        <!-- Botones -->
+        <section
+          id="submitid"
+          class="flex flex-col sm:flex-row justify-center gap-3 mt-1"
+        >
+          <input
+            type="submit"
+            value="Submit"
+            name="submit"
+            class="min-w-[110px] px-4 py-2 rounded-full border border-goldenrod bg-goldenrod text-black font-semibold text-xs tracking-wide uppercase cursor-pointer transition-all duration-200 hover:bg-yellow-400 hover:-translate-y-[2px] hover:shadow-lg"
+          />
+          <input
+            type="reset"
+            value="Reset"
+            name="reset"
+            class="min-w-[110px] px-4 py-2 rounded-full border border-goldenrod bg-transparent text-goldenrod font-semibold text-xs tracking-wide uppercase cursor-pointer transition-all duration-200 hover:bg-goldenrod hover:text-black hover:-translate-y-[2px] hover:shadow-lg"
+          />
         </section>
+      </form>
+    </section>
+  </main>
 
-    </main>
+  <!-- FOOTER (igual estilo que index.html) -->
+  <footer
+    class="w-full bg-goldenrod text-black flex flex-wrap justify-between items-center px-4 py-3 gap-4"
+  >
+    <section class="flex items-center gap-4">
+      <figure>
+        <img
+          src="img/Facebook.svg"
+          alt="Facebook logo"
+          class="h-8 w-auto max-w-[40px]"
+        />
+      </figure>
+      <figure>
+        <img
+          src="img/Instagram.svg"
+          alt="Instagram logo"
+          class="h-8 w-auto max-w-[40px]"
+        />
+      </figure>
+      <figure>
+        <img
+          src="img/Twitter.svg"
+          alt="Twitter logo"
+          class="h-8 w-auto max-w-[40px]"
+        />
+      </figure>
+    </section>
 
-    <footer>
-        <section class="social">
-            <figure>
-                <img src="img/Facebook.svg" alt="Facebook logo">
-            </figure>
-            <figure>
-                <img src="img/Instagram.svg" alt="Instagram logo">
-            </figure>
-            <figure>
-                <img src="img/Facebook.svg" alt="Twitter logo">
-            </figure>
-        </section>
+    <section>
+      <h4 class="text-sm md:text-base">
+        Music App by Kyrila ©2026
+      </h4>
+    </section>
 
-        <section>
-            <h4>Music App by Kyrila ©2026</h4>
-        </section>
+    <section class="mr-0 md:mr-4">
+      <h4 class="text-sm md:text-base">
+        <a
+          href="terms.html"
+          class="no-underline text-black hover:text-gray-600 transition-colors"
+        >
+          Terms and conditions
+        </a>
+      </h4>
+    </section>
+  </footer>
 
-        <section class="conditions">
-            <h4>
-                <a href="terms.html">Terms and conditions</a>
-            </h4>
-        </section>
-            
-    </footer>
-
-    <script src="js/app.js"></script>
-
+  <script src="js/app.js"></script>
 </body>
 </html>

@@ -16,9 +16,11 @@ body{
 }
 
 .logo-link{
-  display:block;
-  width:32%;
-}
+    display: block;
+    width: 66%;
+    max-width: 28rem; /* ~448px, como max-w-md */
+    margin: 0 auto;
+  }
 
 .logo-link img{
   width:100%;

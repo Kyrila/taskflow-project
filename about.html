@@ -1,22 +1,129 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About us</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    
-<header>
-        <a href="index.html" class="logo-link">
-            <img src="img/Music-App-logo.svg" alt="Music App logo">
-        </a>
-    </header>
-    
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About us</title>
 
-    <main>
-        <video class="hero" autoplay loop muted src="media/polvo.mp4"  playsinline></video>
-    </main>
+  <!-- Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            goldenrod: '#DAA520',
+          },
+          fontFamily: {
+            garamond: ['"EB Garamond"', 'serif'],
+          },
+        },
+      },
+    };
+  </script>
+</head>
+
+<body class="min-h-screen flex flex-col bg-black font-garamond text-goldenrod">
+  <!-- HEADER -->
+  <header class="h-[20vh] w-full flex items-center justify-center">
+    <a
+      href="index.html"
+      class="block w-2/3 md:w-1/2 lg:w-1/3 max-w-md"
+    >
+      <img
+        src="img/Music-App-logo.svg"
+        alt="Music App logo"
+        class="w-full h-auto block"
+      />
+    </a>
+  </header>
+
+  <!-- MAIN -->
+  <main class="relative flex-1 flex items-center justify-center px-4 py-8 overflow-hidden">
+    <video
+      class="hero absolute inset-0 w-full h-full object-cover -z-10 opacity-40"
+      autoplay
+      loop
+      muted
+      src="media/polvo.mp4"
+      playsinline
+    ></video>
+
+    <section
+      class="w-full max-w-3xl bg-black/75 border border-goldenrod/60 rounded-2xl shadow-2xl px-6 py-7 backdrop-blur-sm space-y-4"
+    >
+      <h2 class="text-3xl font-semibold text-center tracking-wide mb-2">
+        About Us
+      </h2>
+      <p class="text-sm md:text-base">
+        Music App is a space created for music lovers of all genres. Our goal
+        is to offer a simple, visual and inspiring way to discover and enjoy
+        music.
+      </p>
+      <p class="text-sm md:text-base">
+        From Rap to Classical, from Indie to Flamenco, we believe that every
+        style has a unique story to tell. This app is a tribute to that
+        diversity and to all the artists behind it.
+      </p>
+      <p class="text-sm md:text-base">
+        This project has been designed as part of a learning journey, combining
+        design, usability and front-end development.
+      </p>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer
+    class="w-full bg-goldenrod text-black flex flex-wrap justify-between items-center px-4 py-3 gap-4"
+  >
+    <section class="flex items-center gap-4">
+      <figure>
+        <img
+          src="img/Facebook.svg"
+          alt="Facebook logo"
+          class="h-8 w-auto max-w-[40px]"
+        />
+      </figure>
+      <figure>
+        <img
+          src="img/Instagram.svg"
+          alt="Instagram logo"
+          class="h-8 w-auto max-w-[40px]"
+        />
+      </figure>
+      <figure>
+        <img
+          src="img/Twitter.svg"
+          alt="Twitter logo"
+          class="h-8 w-auto max-w-[40px]"
+        />
+      </figure>
+    </section>
+
+    <section>
+      <h4 class="text-sm md:text-base">
+        Music App by Kyrila ©2026
+      </h4>
+    </section>
+
+    <section class="mr-0 md:mr-4">
+      <h4 class="text-sm md:text-base">
+        <a
+          href="terms.html"
+          class="no-underline text-black hover:text-gray-600 transition-colors"
+        >
+          Terms and conditions
+        </a>
+      </h4>
+    </section>
+  </footer>
 </body>
 </html>
