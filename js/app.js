@@ -3,35 +3,43 @@
 // === FORMULARIO CONTACT.HTML ===
 // ===============================
 
+const CONTACTS_KEY = "contacts";
+
+function loadContacts() {
+    try {
+        const parsed = JSON.parse(localStorage.getItem(CONTACTS_KEY) || "[]"); /*Intenta leer de localStorage el valor asociado a CONTACTS_KEY y, si no existe nada, usa "[]" (un array vacío en texto). Luego hace JSON.parse para convertir ese texto en un array u objeto JavaScript. */
+        return Array.isArray(parsed) ? parsed : [];
+    } catch {
+        return [];
+    }
+}
+
+function saveContacts(contacts) {
+    localStorage.setItem(CONTACTS_KEY, JSON.stringify(contacts)); //Convierte el array contacts en texto JSON con JSON.stringify y lo guarda en localStorage bajo la clave CONTACTS_KEY. 
+}
+
 const contactForm = document.getElementById("taskform");
 
 if (contactForm) {
-    let contacts;
-    try {
-        contacts = JSON.parse(localStorage.getItem("contacts") || "[]");// JSON.parse(...) → convierte el texto a un array + || [] → si no hay nada guardado, usa un array vacío
-        if (!Array.isArray(contacts)) contacts = [];
-    } catch {
-        contacts = [];
-    }
+    const contacts = loadContacts();
 
-    contactForm.addEventListener("submit", function (e) {
+    contactForm.addEventListener("submit", (e) => {
         e.preventDefault(); // Evita que recargue la página
 
         const fname = document.getElementById("fname").value;
         const lname = document.getElementById("lname").value;
         const tel = document.getElementById("tel").value;
         const email = document.getElementById("email").value;
-    
-        // Obtener los checkboxes marcados
-        const sources = [];
-        document
-            .querySelectorAll("#about input[type='checkbox']:checked") // Busca todos los checkbox marcados dentro de #about + Recorre cada uno
-            .forEach((box) => sources.push(box.value)); // Extrae su .value + Los mete dentro del array sources
+
+        const sources = Array.from(
+            document.querySelectorAll("#about input[type='checkbox']:checked"), //Selecciona todos los checkboxes marcados dentro del contenedor con id about
+            (box) => box.value //Array.from(..., (box) => box.value) crea un array nuevo con los value de cada checkbox marcado, y lo asigna a sources.
+        );
 
         const contact = { fname, lname, tel, email, sources }; // Crea el objeto con los datos
 
         contacts.push(contact); // Añade el nuevo contacto al final de la lista de contactos
-        localStorage.setItem("contacts", JSON.stringify(contacts)); // JSON.stringify() → convierte el array en texto + localStorage → lo almacena de forma permanente
+        saveContacts(contacts); 
 
         console.log("Guardado:", contact);
         contactForm.reset(); // Vuelve a poner todos los campos vacíos después de enviar
@@ -47,7 +55,16 @@ if (contactForm) {
 
 const TASKS_KEY = "tasks"; //Clave LocalStorage
 
-let tasks = JSON.parse(localStorage.getItem(TASKS_KEY)) || []; // Cargar tareas
+function loadTasks() {
+    try {
+        const parsed = JSON.parse(localStorage.getItem(TASKS_KEY) || "[]");
+        return Array.isArray(parsed) ? parsed : [];
+    } catch {
+        return [];
+    }
+}
+
+let tasks = loadTasks(); // Cargar tareas
 
 // Guardar
 function saveTasks() {
@@ -57,15 +74,19 @@ function saveTasks() {
 // Crear LI
 function createTaskItem(texto, index) {
     const li = document.createElement("li");
-    li.className = "todo-item";
+    // Mantiene las clases antiguas (todo-item/delete-btn) por compatibilidad,
+    // pero añade layout Tailwind para que el botón quede a la derecha.
+    li.className =
+        "todo-item flex items-start gap-3 rounded-md border border-goldenrod bg-goldenrod/20 px-3 py-2 text-goldenrod";
     li.dataset.index = index; // para saber cuál tarea está borrando después (Le asigna un atributo data-index="0" o "1")
 
     const span = document.createElement("span");
-    span.className = "todo-text";
+    span.className = "todo-text flex-1 min-w-0 break-words";
     span.textContent = texto;
 
     const btnDelete = document.createElement("button");
-    btnDelete.className = "delete-btn";
+    btnDelete.className =
+        "delete-btn shrink-0 ml-auto self-start rounded-md border border-goldenrod bg-black px-2 py-1 text-sm text-goldenrod transition-all duration-200 hover:bg-goldenrod hover:text-black";
     btnDelete.type = "button";
     btnDelete.textContent = "Eliminar";
 
