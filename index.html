@@ -62,11 +62,66 @@
       background-color: #DAA520;
       border-radius: 999px;
     }
+
+    /* Estilos de inputs/select en tema claro para la sección de tareas */
+    .theme-light .todo input,
+    .theme-light .todo select {
+      background-color: #ffffff;
+      color: #000000;
+      border-color: #000000;
+    }
+
+    .theme-light .todo input::placeholder {
+      color: #555555;
+    }
+
+    /* En tema claro: enlaces Login, About, Contact en blanco */
+    .theme-light a[href="login.html"],
+    .theme-light a[href="about.html"],
+    .theme-light a[href="contact.html"] {
+      color: #ffffff !important;
+    }
+
+    .theme-light a[href="login.html"]:hover,
+    .theme-light a[href="about.html"]:hover,
+    .theme-light a[href="contact.html"]:hover {
+      color: #e5e5e5 !important;
+    }
+
+    /* En tema claro: quitar filtro/opacidad del vídeo de fondo */
+    .theme-light video {
+      opacity: 1 !important;
+    }
+
+    /* En tema claro: tarjetas de tareas más claras y texto blanco */
+    .theme-light .todo .todo-item {
+      background-color: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.6);
+      color: #ffffff;
+    }
+
+    .theme-light .todo .todo-item .todo-text {
+      color: #ffffff;
+    }
+
+    .theme-light .todo .todo-item span {
+      color: #ffffff;
+    }
   </style>
 </head>
 
 <body class="min-h-screen flex flex-col bg-black font-garamond text-goldenrod">
-    
+  
+  <!-- Botón de cambio de tema -->
+  <button
+    id="theme-toggle"
+    type="button"
+    class="fixed top-4 right-4 z-20 rounded-full border border-goldenrod bg-black/80 px-3 py-1 text-xs md:text-sm text-goldenrod hover:bg-goldenrod hover:text-black transition-colors duration-200"
+    aria-label="Cambiar tema de la interfaz"
+  >
+    Light theme
+  </button>
+
   <!-- HEADER -->
   <header class="h-[20vh] w-full flex items-center justify-center">
     <a

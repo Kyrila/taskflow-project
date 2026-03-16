@@ -112,6 +112,15 @@ function compareByDueDate(a, b) {
     return da - db; // más antigua (más urgente) primero
 }
 
+// Formatea una fecha (YYYY-MM-DD) a DD-MM-YY para mostrar
+function formatDateForDisplay(dateStr) {
+    if (!dateStr) return "";
+    const [year, month, day] = dateStr.split("-");
+    if (!year || !month || !day) return dateStr;
+    const shortYear = year.slice(-2);
+    return `${day}-${month}-${shortYear}`;
+}
+
 // Crear LI
 function createTaskItem(task) {
     const li = document.createElement("li");
@@ -172,7 +181,7 @@ function createTaskItem(task) {
                 colorClasses =
                     "border-yellow-400/70 bg-yellow-900/40 text-yellow-200";
             } else {
-                label = `Para ${task.dueDate}`;
+                label = `Para ${formatDateForDisplay(task.dueDate)}`;
             }
 
             dueBadge.className = `mt-1 ml-1 inline-flex items-center rounded-full border px-2 py-0.5 text-xs uppercase tracking-wide ${colorClasses}`;
@@ -180,7 +189,9 @@ function createTaskItem(task) {
         } else {
             dueBadge.className =
                 "mt-1 ml-1 inline-flex items-center rounded-full border border-goldenrod/60 bg-black/40 px-2 py-0.5 text-xs uppercase tracking-wide";
-            dueBadge.textContent = `Fecha: ${task.dueDate}`;
+            dueBadge.textContent = `Fecha: ${formatDateForDisplay(
+                task.dueDate
+            )}`;
         }
 
         contentWrapper.appendChild(dueBadge);
@@ -200,6 +211,43 @@ function createTaskItem(task) {
 
     return li;
 }
+
+// =============================
+// ========= THEME =============
+// =============================
+
+const THEME_KEY = "app-theme";
+
+function applyTheme(theme) {
+    const body = document.body;
+    const toggleBtn = document.getElementById("theme-toggle");
+
+    if (theme === "light") {
+        body.classList.remove("bg-black", "text-goldenrod", "theme-dark");
+        body.classList.add("bg-white", "text-black", "theme-light");
+        if (toggleBtn) toggleBtn.textContent = "Dark theme";
+    } else {
+        body.classList.remove("bg-white", "text-black", "theme-light");
+        body.classList.add("bg-black", "text-goldenrod", "theme-dark");
+        if (toggleBtn) toggleBtn.textContent = "Light theme";
+    }
+
+    localStorage.setItem(THEME_KEY, theme);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    const savedTheme = localStorage.getItem(THEME_KEY) || "dark";
+    applyTheme(savedTheme);
+
+    const toggleBtn = document.getElementById("theme-toggle");
+    if (toggleBtn) {
+        toggleBtn.addEventListener("click", () => {
+            const current = localStorage.getItem(THEME_KEY) || "dark";
+            const next = current === "dark" ? "light" : "dark";
+            applyTheme(next);
+        });
+    }
+});
 
 // ======================================================
 // ===== SE ACTIVA SOLO SI EXISTE EL WIDGET TO‑DO =======
