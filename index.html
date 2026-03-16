@@ -43,6 +43,25 @@
       white-space: nowrap;
       border: 0;
     }
+
+    /* Scrollbar personalizado para listas de tareas */
+    .todo ul {
+      scrollbar-width: thin;
+      scrollbar-color: #DAA520 #000000; /* thumb, track */
+    }
+
+    .todo ul::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .todo ul::-webkit-scrollbar-track {
+      background: #000000;
+    }
+
+    .todo ul::-webkit-scrollbar-thumb {
+      background-color: #DAA520;
+      border-radius: 999px;
+    }
   </style>
 </head>
 
@@ -243,6 +262,16 @@
             aria-label="Escribe una tarea"
             class="px-3 py-2 rounded-md border border-goldenrod bg-black text-goldenrod placeholder-yellow-300 focus:outline-none focus:border-yellow-300 focus:ring-2 focus:ring-yellow-400/60"
           />
+          <div class="flex items-center justify-between gap-2 text-xs">
+            <label for="task-date" class="uppercase tracking-wide"
+              >Fecha límite</label
+            >
+            <input
+              id="task-date"
+              type="date"
+              class="max-w-[60%] rounded-md border border-goldenrod bg-black px-2 py-1 text-goldenrod focus:outline-none focus:border-yellow-300 focus:ring-1 focus:ring-yellow-400/60"
+            />
+          </div>
           <button
             type="submit"
             aria-label="Añadir tarea"
@@ -256,7 +285,7 @@
           id="todo-list"
           aria-live="polite"
           aria-label="Lista de tareas"
-          class="mt-4 flex flex-col gap-2 list-none p-0"
+          class="mt-4 flex flex-col gap-2 list-none p-0 max-h-56 overflow-y-auto pr-1"
         ></ul>
       </section>
     </aside>
@@ -343,6 +372,16 @@
           aria-label="Escribe una tarea"
           class="px-3 py-2 rounded-md border border-goldenrod bg-black text-goldenrod placeholder-yellow-300 focus:outline-none focus:border-yellow-300 focus:ring-2 focus:ring-yellow-400/60"
         />
+        <div class="flex items-center justify-between gap-2 text-xs">
+          <label for="task-date-mobile" class="uppercase tracking-wide"
+            >Fecha límite</label
+          >
+          <input
+            id="task-date-mobile"
+            type="date"
+            class="max-w-[60%] rounded-md border border-goldenrod bg-black px-2 py-1 text-goldenrod focus:outline-none focus:border-yellow-300 focus:ring-1 focus:ring-yellow-400/60"
+          />
+        </div>
         <button
           type="submit"
           aria-label="Añadir tarea"
@@ -356,7 +395,7 @@
         id="todo-list-mobile"
         aria-live="polite"
         aria-label="Lista de tareas"
-        class="mt-4 flex flex-col gap-2 list-none p-0"
+        class="mt-4 flex flex-col gap-2 list-none p-0 max-h-56 overflow-y-auto pr-1"
       ></ul>
     </section>
   </section>

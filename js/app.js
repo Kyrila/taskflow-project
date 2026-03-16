@@ -55,7 +55,7 @@ if (contactForm) {
 const TASKS_KEY = "tasks"; //Clave LocalStorage
 
 // Cargar tareas desde localStorage, soportando tanto el formato antiguo (string)
-// como el nuevo formato { text, level }.
+// como el nuevo formato { id, text, level, dueDate }.
 function loadTasksFromStorage() {
     try {
         const parsed = JSON.parse(localStorage.getItem(TASKS_KEY) || "[]");
@@ -63,14 +63,25 @@ function loadTasksFromStorage() {
 
         return parsed
             .map((item) => {
+                const baseId = `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+
+                // Formato antiguo: solo string
                 if (typeof item === "string") {
-                    return { text: item, level: "medio" };
+                    return {
+                        id: baseId,
+                        text: item,
+                        level: "medio",
+                        dueDate: null,
+                    };
                 }
 
+                // Formato objeto
                 if (item && typeof item.text === "string") {
                     return {
+                        id: item.id || baseId,
                         text: item.text,
                         level: item.level || "medio",
+                        dueDate: item.dueDate || null,
                     };
                 }
 
@@ -89,14 +100,26 @@ function saveTasks() {
     localStorage.setItem(TASKS_KEY, JSON.stringify(tasks));
 }
 
+// Comparador por fecha límite (tareas más urgentes primero)
+function compareByDueDate(a, b) {
+    if (!a.dueDate && !b.dueDate) return 0;
+    if (!a.dueDate) return 1; // a sin fecha, va después
+    if (!b.dueDate) return -1; // b sin fecha, va después
+
+    const da = new Date(a.dueDate);
+    const db = new Date(b.dueDate);
+    if (isNaN(da) || isNaN(db)) return 0;
+    return da - db; // más antigua (más urgente) primero
+}
+
 // Crear LI
-function createTaskItem(task, index) {
+function createTaskItem(task) {
     const li = document.createElement("li");
     // Mantiene las clases antiguas (todo-item/delete-btn) por compatibilidad,
     // pero añade layout Tailwind para que el botón quede a la derecha.
     li.className =
         "todo-item flex items-start gap-3 rounded-md border border-goldenrod bg-goldenrod/20 px-3 py-2 text-goldenrod";
-    li.dataset.index = index; // para saber cuál tarea está borrando después (Le asigna un atributo data-index="0" o "1")
+    li.dataset.id = task.id; // identificador único de la tarea
     li.dataset.level = task.level; // nivel de la tarea (facil/medio/dificil)
 
     const contentWrapper = document.createElement("div");
@@ -115,6 +138,53 @@ function createTaskItem(task, index) {
     if (task.level === "dificil") badgeText = "Difícil";
 
     badge.textContent = `Nivel: ${badgeText}`;
+
+    // Información de fecha límite y recordatorio corto
+    if (task.dueDate) {
+        const dueBadge = document.createElement("span");
+
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const due = new Date(task.dueDate);
+        if (!isNaN(due)) {
+            due.setHours(0, 0, 0, 0);
+            const diffMs = due.getTime() - today.getTime();
+            const diffDays = Math.round(diffMs / (1000 * 60 * 60 * 24));
+
+            let label = "";
+            let colorClasses =
+                "border-goldenrod/60 bg-black/40 text-goldenrod";
+
+            if (diffDays < 0) {
+                label = "Vencida";
+                colorClasses =
+                    "border-red-500/70 bg-red-900/40 text-red-300";
+            } else if (diffDays === 0) {
+                label = "Hoy";
+                colorClasses =
+                    "border-yellow-400/70 bg-yellow-900/40 text-yellow-200";
+            } else if (diffDays === 1) {
+                label = "Mañana";
+                colorClasses =
+                    "border-yellow-400/70 bg-yellow-900/40 text-yellow-200";
+            } else if (diffDays <= 3) {
+                label = `En ${diffDays} días`;
+                colorClasses =
+                    "border-yellow-400/70 bg-yellow-900/40 text-yellow-200";
+            } else {
+                label = `Para ${task.dueDate}`;
+            }
+
+            dueBadge.className = `mt-1 ml-1 inline-flex items-center rounded-full border px-2 py-0.5 text-xs uppercase tracking-wide ${colorClasses}`;
+            dueBadge.textContent = label;
+        } else {
+            dueBadge.className =
+                "mt-1 ml-1 inline-flex items-center rounded-full border border-goldenrod/60 bg-black/40 px-2 py-0.5 text-xs uppercase tracking-wide";
+            dueBadge.textContent = `Fecha: ${task.dueDate}`;
+        }
+
+        contentWrapper.appendChild(dueBadge);
+    }
 
     contentWrapper.appendChild(span);
     contentWrapper.appendChild(badge);
@@ -143,6 +213,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const list = document.getElementById("todo-list");
     const levelSelect = document.getElementById("task-level"); // select para nivel de tarea
     const filterSelect = document.getElementById("task-filter"); // select para filtrar tareas
+    const dateInput = document.getElementById("task-date"); // fecha límite
 
     // Mobile
     const todoFormMobile = document.getElementById("task-form-mobile");
@@ -150,6 +221,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const listMobile = document.getElementById("todo-list-mobile");
     const levelSelectMobile = document.getElementById("task-level-mobile");
     const filterSelectMobile = document.getElementById("task-filter-mobile");
+    const dateInputMobile = document.getElementById("task-date-mobile");
 
     // Si no existe ningún widget → salir del script (no rompe otras páginas)
     if (!todoForm && !todoFormMobile) return;
@@ -160,10 +232,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
         targetList.innerHTML = ""; // Vacía el contenido antes de llenarlo de nuevo
 
-        tasks.forEach((task, index) => {
-            if (filterLevel === "all" || task.level === filterLevel) {
-                targetList.appendChild(createTaskItem(task, index));
-            }
+        const filtered = tasks.filter(
+            (task) => filterLevel === "all" || task.level === filterLevel
+        );
+
+        const sorted = filtered.slice().sort(compareByDueDate);
+
+        sorted.forEach((task) => {
+            targetList.appendChild(createTaskItem(task));
         });
     }
 
@@ -198,12 +274,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
 
+            const dueDateValue = dateInput ? dateInput.value : "";
             const selectedLevel =
                 (levelSelect && levelSelect.value) || "medio"; // facil / medio / dificil
 
             tasks.push({
+                id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
                 text: texto,
                 level: selectedLevel,
+                dueDate: dueDateValue || null,
             }); // Añade la nueva tarea al array
             saveTasks();
 
@@ -214,6 +293,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             input.value = ""; // Limpia la caja
             input.focus();  // Vuelve a darle el foco para escribir rápidamente
+            if (dateInput) dateInput.value = "";
         });
     }
 
@@ -228,12 +308,17 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
 
+            const dueDateValueMobile = dateInputMobile
+                ? dateInputMobile.value
+                : "";
             const selectedLevelMobile =
                 (levelSelectMobile && levelSelectMobile.value) || "medio";
 
             tasks.push({
+                id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
                 text: texto,
                 level: selectedLevelMobile,
+                dueDate: dueDateValueMobile || null,
             });
             saveTasks();
 
@@ -244,6 +329,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             inputMobile.value = "";
             inputMobile.focus();
+            if (dateInputMobile) dateInputMobile.value = "";
         });
     }
 
@@ -254,9 +340,12 @@ document.addEventListener("DOMContentLoaded", () => {
         targetList.addEventListener("click", (e) => {
             if (e.target.classList.contains("delete-btn")) {  // Asegura que el clic fue en un botón de borrar
                 const li = e.target.closest("li");
-                const index = li.dataset.index;
+                const id = li.dataset.id;
 
-                tasks.splice(index, 1);
+                const index = tasks.findIndex((task) => task.id === id);
+                if (index !== -1) {
+                    tasks.splice(index, 1);
+                }
                 saveTasks();
 
                 const currentFilterDesktop =
