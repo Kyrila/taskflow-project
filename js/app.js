@@ -410,3 +410,171 @@ document.addEventListener("DOMContentLoaded", () => {
     setupDeleteListener(list);
     setupDeleteListener(listMobile);
 });
+
+// =============================
+// ======== PLAYLIST ==========
+// =============================
+
+const PLAYLIST_KEY = "playlist";
+
+function loadPlaylist() {
+    try {
+        const parsed = JSON.parse(localStorage.getItem(PLAYLIST_KEY) || "[]");
+        return Array.isArray(parsed) ? parsed : [];
+    } catch {
+        return [];
+    }
+}
+
+function savePlaylist(playlist) {
+    localStorage.setItem(PLAYLIST_KEY, JSON.stringify(playlist));
+}
+
+function createSongItem(song) {
+    const li = document.createElement("li");
+    li.className =
+        "song-item flex items-start gap-3 rounded-md border border-goldenrod bg-black/40 px-3 py-2 text-goldenrod";
+    li.dataset.id = song.id;
+    li.dataset.genre = song.genre;
+
+    const content = document.createElement("div");
+    content.className = "flex-1 min-w-0";
+
+    const title = document.createElement("p");
+    title.className = "font-semibold break-words";
+    title.textContent = song.title || "Sin título";
+
+    const artist = document.createElement("p");
+    artist.className = "text-sm opacity-80 break-words";
+    artist.textContent = song.artist || "Artista desconocido";
+
+    const meta = document.createElement("div");
+    meta.className = "mt-1 flex flex-wrap items-center gap-2 text-xs";
+
+    const genreBadge = document.createElement("span");
+    genreBadge.className =
+        "inline-flex items-center rounded-full border border-goldenrod/60 bg-black/40 px-2 py-0.5 uppercase tracking-wide";
+
+    const genreLabelMap = {
+        "rap": "RAP",
+        "rock": "ROCK",
+        "hip-hop": "HIP-HOP",
+        "classical": "CLASSICAL",
+        "blues": "BLUES",
+        "electro": "ELECTRO",
+        "pop": "POP",
+        "rnb": "R&B",
+        "soul": "SOUL",
+        "indie": "INDIE",
+        "flamenco": "FLAMENCO",
+        "jazz": "JAZZ",
+    };
+    genreBadge.textContent = genreLabelMap[song.genre] || song.genre || "GENRE";
+
+    if (song.url) {
+        const link = document.createElement("a");
+        link.href = song.url;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        link.className =
+            "underline decoration-goldenrod/60 hover:decoration-yellow-300";
+        link.textContent = "Play";
+        meta.appendChild(link);
+    }
+
+    meta.appendChild(genreBadge);
+
+    content.appendChild(title);
+    content.appendChild(artist);
+    content.appendChild(meta);
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.type = "button";
+    deleteBtn.className =
+        "playlist-delete-btn shrink-0 ml-auto self-start rounded-md border border-goldenrod bg-black px-2 py-1 text-xs text-goldenrod transition-all duration-200 hover:bg-goldenrod hover:text-black";
+    deleteBtn.textContent = "Eliminar";
+
+    li.appendChild(content);
+    li.appendChild(deleteBtn);
+
+    return li;
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("playlist-form");
+    const list = document.getElementById("playlist-list");
+    const filterSelect = document.getElementById("playlist-filter");
+
+    if (!form || !list || !filterSelect) return;
+
+    let playlist = loadPlaylist();
+
+    function renderPlaylist(filterGenre = "all") {
+        list.innerHTML = "";
+
+        playlist
+            .filter(
+                (song) => filterGenre === "all" || song.genre === filterGenre
+            )
+            .forEach((song) => {
+                list.appendChild(createSongItem(song));
+            });
+    }
+
+    renderPlaylist();
+
+    filterSelect.addEventListener("change", () => {
+        const value = filterSelect.value || "all";
+        renderPlaylist(value);
+    });
+
+    form.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const titleInput = document.getElementById("song-title");
+        const artistInput = document.getElementById("song-artist");
+        const genreSelect = document.getElementById("song-genre");
+        const urlInput = document.getElementById("song-url");
+
+        const title = titleInput.value.trim();
+        const artist = artistInput.value.trim();
+        const genre = genreSelect.value;
+        const url = urlInput.value.trim();
+
+        if (!title && !artist) {
+            return;
+        }
+
+        const newSong = {
+            id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+            title,
+            artist,
+            genre,
+            url: url || "",
+        };
+
+        playlist.push(newSong);
+        savePlaylist(playlist);
+
+        const activeFilter = filterSelect.value || "all";
+        renderPlaylist(activeFilter);
+
+        titleInput.value = "";
+        artistInput.value = "";
+        urlInput.value = "";
+        titleInput.focus();
+    });
+
+    list.addEventListener("click", (e) => {
+        if (e.target.classList.contains("playlist-delete-btn")) {
+            const li = e.target.closest("li");
+            const id = li.dataset.id;
+
+            playlist = playlist.filter((song) => song.id !== id);
+            savePlaylist(playlist);
+
+            const activeFilter = filterSelect.value || "all";
+            renderPlaylist(activeFilter);
+        }
+    });
+});
