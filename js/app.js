@@ -52,19 +52,37 @@ if (contactForm) {
 // ========= TO‑DO LIST ========
 // =============================
 
-
 const TASKS_KEY = "tasks"; //Clave LocalStorage
 
-function loadTasks() {
+// Cargar tareas desde localStorage, soportando tanto el formato antiguo (string)
+// como el nuevo formato { text, level }.
+function loadTasksFromStorage() {
     try {
         const parsed = JSON.parse(localStorage.getItem(TASKS_KEY) || "[]");
-        return Array.isArray(parsed) ? parsed : [];
+        if (!Array.isArray(parsed)) return [];
+
+        return parsed
+            .map((item) => {
+                if (typeof item === "string") {
+                    return { text: item, level: "medio" };
+                }
+
+                if (item && typeof item.text === "string") {
+                    return {
+                        text: item.text,
+                        level: item.level || "medio",
+                    };
+                }
+
+                return null;
+            })
+            .filter(Boolean);
     } catch {
         return [];
     }
 }
 
-let tasks = loadTasks(); // Cargar tareas
+let tasks = loadTasksFromStorage(); // Cargar tareas
 
 // Guardar
 function saveTasks() {
@@ -72,17 +90,34 @@ function saveTasks() {
 }
 
 // Crear LI
-function createTaskItem(texto, index) {
+function createTaskItem(task, index) {
     const li = document.createElement("li");
     // Mantiene las clases antiguas (todo-item/delete-btn) por compatibilidad,
     // pero añade layout Tailwind para que el botón quede a la derecha.
     li.className =
         "todo-item flex items-start gap-3 rounded-md border border-goldenrod bg-goldenrod/20 px-3 py-2 text-goldenrod";
     li.dataset.index = index; // para saber cuál tarea está borrando después (Le asigna un atributo data-index="0" o "1")
+    li.dataset.level = task.level; // nivel de la tarea (facil/medio/dificil)
+
+    const contentWrapper = document.createElement("div");
+    contentWrapper.className = "flex-1 min-w-0";
 
     const span = document.createElement("span");
-    span.className = "todo-text flex-1 min-w-0 break-words";
-    span.textContent = texto;
+    span.className = "todo-text block break-words";
+    span.textContent = task.text;
+
+    const badge = document.createElement("span");
+    badge.className =
+        "mt-1 inline-flex items-center rounded-full border border-goldenrod/60 bg-black/40 px-2 py-0.5 text-xs uppercase tracking-wide";
+
+    let badgeText = "Medio";
+    if (task.level === "facil") badgeText = "Fácil";
+    if (task.level === "dificil") badgeText = "Difícil";
+
+    badge.textContent = `Nivel: ${badgeText}`;
+
+    contentWrapper.appendChild(span);
+    contentWrapper.appendChild(badge);
 
     const btnDelete = document.createElement("button");
     btnDelete.className =
@@ -90,25 +125,11 @@ function createTaskItem(texto, index) {
     btnDelete.type = "button";
     btnDelete.textContent = "Eliminar";
 
-    li.appendChild(span);
+    li.appendChild(contentWrapper);
     li.appendChild(btnDelete);
 
     return li;
 }
-
-// Pintar tareas guardadas
-function loadTasks() {
-    const list = document.getElementById("todo-list");
-    if (!list) return;
-
-    list.innerHTML = ""; // Vacía el contenido antes de llenarlo de nuevo
-
-    tasks.forEach((texto, index) => {
-        list.appendChild(createTaskItem(texto, index));
-    });
-}
-
-
 
 // ======================================================
 // ===== SE ACTIVA SOLO SI EXISTE EL WIDGET TO‑DO =======
@@ -116,43 +137,139 @@ function loadTasks() {
 
 //se ejecuta cuando todo el HTML ya está cargado
 document.addEventListener("DOMContentLoaded", () => {
+    // Desktop
     const todoForm = document.getElementById("task-form");
     const input = document.getElementById("new-task");
     const list = document.getElementById("todo-list");
+    const levelSelect = document.getElementById("task-level"); // select para nivel de tarea
+    const filterSelect = document.getElementById("task-filter"); // select para filtrar tareas
 
-    // Si no existe el widget → salir del script (no rompe otras páginas)
-    if (!todoForm || !input || !list) return;
+    // Mobile
+    const todoFormMobile = document.getElementById("task-form-mobile");
+    const inputMobile = document.getElementById("new-task-mobile");
+    const listMobile = document.getElementById("todo-list-mobile");
+    const levelSelectMobile = document.getElementById("task-level-mobile");
+    const filterSelectMobile = document.getElementById("task-filter-mobile");
 
-    // Cargar tareas guardadas al abrir la página
-    loadTasks();
+    // Si no existe ningún widget → salir del script (no rompe otras páginas)
+    if (!todoForm && !todoFormMobile) return;
 
-    // Añadir tarea
-    todoForm.addEventListener("submit", (e) => {
-        e.preventDefault();
+    // Función para pintar tareas con filtro por nivel en una lista dada
+    function renderTasksForList(targetList, filterLevel = "all") {
+        if (!targetList) return;
 
-        const texto = input.value.trim(); // Evita tareas vacías + Elimina espacios al inicio y final
-        if (!texto) {
-            input.value = "";
-            return;
-        }
+        targetList.innerHTML = ""; // Vacía el contenido antes de llenarlo de nuevo
 
-        tasks.push(texto); // Añade la nueva tarea al array
-        saveTasks();
-        loadTasks();
+        tasks.forEach((task, index) => {
+            if (filterLevel === "all" || task.level === filterLevel) {
+                targetList.appendChild(createTaskItem(task, index));
+            }
+        });
+    }
 
-        input.value = ""; // Limpia la caja
-        input.focus();  // Vuelve a darle el foco para escribir rápidamente
-    });
+    // Pintar listas iniciales
+    renderTasksForList(list, "all");
+    renderTasksForList(listMobile, "all");
 
-    // Eliminar tarea
-    list.addEventListener("click", (e) => {
-        if (e.target.classList.contains("delete-btn")) {  // Asegura que el clic fue en un botón de borrar
-            const li = e.target.closest("li");
-            const index = li.dataset.index;
+    // Cambiar filtro de tareas (tres niveles seleccionables) desktop
+    if (filterSelect) {
+        filterSelect.addEventListener("change", () => {
+            const value = filterSelect.value || "all"; // valores esperados: all, facil, medio, dificil
+            renderTasksForList(list, value);
+        });
+    }
 
-            tasks.splice(index, 1);
+    // Cambiar filtro de tareas (tres niveles seleccionables) móvil
+    if (filterSelectMobile) {
+        filterSelectMobile.addEventListener("change", () => {
+            const value = filterSelectMobile.value || "all";
+            renderTasksForList(listMobile, value);
+        });
+    }
+
+    // Añadir tarea en desktop
+    if (todoForm && input && list) {
+        todoForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+
+            const texto = input.value.trim(); // Evita tareas vacías + Elimina espacios al inicio y final
+            if (!texto) {
+                input.value = "";
+                return;
+            }
+
+            const selectedLevel =
+                (levelSelect && levelSelect.value) || "medio"; // facil / medio / dificil
+
+            tasks.push({
+                text: texto,
+                level: selectedLevel,
+            }); // Añade la nueva tarea al array
             saveTasks();
-            loadTasks();
-        }
-    });
+
+            const activeFilter =
+                (filterSelect && filterSelect.value) || "all";
+            renderTasksForList(list, activeFilter);
+            renderTasksForList(listMobile, activeFilter);
+
+            input.value = ""; // Limpia la caja
+            input.focus();  // Vuelve a darle el foco para escribir rápidamente
+        });
+    }
+
+    // Añadir tarea en móvil
+    if (todoFormMobile && inputMobile && listMobile) {
+        todoFormMobile.addEventListener("submit", (e) => {
+            e.preventDefault();
+
+            const texto = inputMobile.value.trim();
+            if (!texto) {
+                inputMobile.value = "";
+                return;
+            }
+
+            const selectedLevelMobile =
+                (levelSelectMobile && levelSelectMobile.value) || "medio";
+
+            tasks.push({
+                text: texto,
+                level: selectedLevelMobile,
+            });
+            saveTasks();
+
+            const activeFilterMobile =
+                (filterSelectMobile && filterSelectMobile.value) || "all";
+            renderTasksForList(listMobile, activeFilterMobile);
+            renderTasksForList(list, activeFilterMobile);
+
+            inputMobile.value = "";
+            inputMobile.focus();
+        });
+    }
+
+    // Eliminar tarea (delegado) para ambas listas
+    function setupDeleteListener(targetList) {
+        if (!targetList) return;
+
+        targetList.addEventListener("click", (e) => {
+            if (e.target.classList.contains("delete-btn")) {  // Asegura que el clic fue en un botón de borrar
+                const li = e.target.closest("li");
+                const index = li.dataset.index;
+
+                tasks.splice(index, 1);
+                saveTasks();
+
+                const currentFilterDesktop =
+                    (filterSelect && filterSelect.value) || "all";
+                const currentFilterMobile =
+                    (filterSelectMobile && filterSelectMobile.value) || "all";
+
+                renderTasksForList(list, currentFilterDesktop);
+                renderTasksForList(listMobile, currentFilterMobile);
+            }
+        });
+    }
+
+    setupDeleteListener(list);
+    setupDeleteListener(listMobile);
 });

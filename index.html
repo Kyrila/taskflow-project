@@ -197,6 +197,38 @@
           My tasks
         </h3>
 
+        <!-- Controles de nivel y filtro -->
+        <div class="mb-3 flex flex-col gap-2 text-sm">
+          <div class="flex items-center justify-between gap-2">
+            <label for="task-level" class="text-xs uppercase tracking-wide"
+              >Nivel de tarea</label
+            >
+            <select
+              id="task-level"
+              class="max-w-[60%] rounded-md border border-goldenrod bg-black px-2 py-1 text-goldenrod text-xs focus:outline-none focus:border-yellow-300 focus:ring-1 focus:ring-yellow-400/60"
+            >
+              <option value="facil">Fácil</option>
+              <option value="medio" selected>Media</option>
+              <option value="dificil">Difícil</option>
+            </select>
+          </div>
+
+          <div class="flex items-center justify-between gap-2">
+            <label for="task-filter" class="text-xs uppercase tracking-wide"
+              >Filtrar tareas</label
+            >
+            <select
+              id="task-filter"
+              class="max-w-[60%] rounded-md border border-goldenrod bg-black px-2 py-1 text-goldenrod text-xs focus:outline-none focus:border-yellow-300 focus:ring-1 focus:ring-yellow-400/60"
+            >
+              <option value="all">Todas</option>
+              <option value="facil">Fáciles</option>
+              <option value="medio">Medias</option>
+              <option value="dificil">Difíciles</option>
+            </select>
+          </div>
+        </div>
+
         <form
           id="task-form"
           autocomplete="off"
@@ -262,6 +294,40 @@
       >
         My tasks
       </h3>
+
+      <!-- Controles de nivel y filtro para móvil -->
+      <div class="mb-3 flex flex-col gap-2 text-sm">
+        <div class="flex items-center justify-between gap-2">
+          <label for="task-level-mobile" class="text-xs uppercase tracking-wide"
+            >Nivel de tarea</label
+          >
+          <select
+            id="task-level-mobile"
+            class="max-w-[60%] rounded-md border border-goldenrod bg-black px-2 py-1 text-goldenrod text-xs focus:outline-none focus:border-yellow-300 focus:ring-1 focus:ring-yellow-400/60"
+          >
+            <option value="facil">Fácil</option>
+            <option value="medio" selected>Media</option>
+            <option value="dificil">Difícil</option>
+          </select>
+        </div>
+
+        <div class="flex items-center justify-between gap-2">
+          <label
+            for="task-filter-mobile"
+            class="text-xs uppercase tracking-wide"
+            >Filtrar tareas</label
+          >
+          <select
+            id="task-filter-mobile"
+            class="max-w-[60%] rounded-md border border-goldenrod bg-black px-2 py-1 text-goldenrod text-xs focus:outline-none focus:border-yellow-300 focus:ring-1 focus:ring-yellow-400/60"
+          >
+            <option value="all">Todas</option>
+            <option value="facil">Fáciles</option>
+            <option value="medio">Medias</option>
+            <option value="dificil">Difíciles</option>
+          </select>
+        </div>
+      </div>
 
       <form
         id="task-form-mobile"
