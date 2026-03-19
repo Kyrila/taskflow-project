@@ -1,0 +1,47 @@
+# Node modules (si usas Tailwind vía npm)
+node_modules/
+
+# Build de Tailwind
+dist/
+build/
+public/build/
+*.css.map
+
+# Archivos generados por el sistema
+.DS_Store
+Thumbs.db
+
+# Archivos del editor
+.vscode/
+.idea/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Ambiente / configuraciones sensibles
+.env
+.env.local
+.env.*.local
+
+# Cache de herramientas
+.cache/
+.parcel-cache/
+.postcss-cache/
+
+# Output temporal
+*.tmp
+*.temp
+
+# Archivos de dependencia del navegador
+package-lock.json
+yarn.lock
+
+# Archivos de previsualización temporal
+*.swp
+*.swo
+``
+# Variables de entorno
+.env
